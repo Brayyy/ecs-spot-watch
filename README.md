@@ -9,5 +9,6 @@ Environment variables for additional configuration:
 
 | Key | Default | Description |
 | - | - | - |
+| `ECS_AGENT` | `172.17.0.1:51678` | Used to overwrite the default IP/host/port of the ecs-agent |
 | `EXIT_IF_NOT_SPOT` | `false` |  If set `true`, script will exit if the instance-life-cycle is set to normal, and not spot. This is usually not preferred, as your container scheduler may consider this to be an error, and try to relaunch. |
 | `SHOW_OK` | `false` | If set `true`, script will print "OK" for every 5 second loop. |

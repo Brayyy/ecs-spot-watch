@@ -12,9 +12,21 @@ if [ "$(curl -s http://169.254.169.254/latest/meta-data/instance-life-cycle)" ==
   while :; do sleep 3600; done
 fi
 
+if [ "$ECS_AGENT" == "" ]; then
+  ECS_AGENT="172.17.0.1:51678"
+fi
+
 # Read ECS data for later
-ECS_CLUSTER=$(curl -s http://localhost:51678/v1/metadata | jq -r .Cluster)
-CONTAINER_INSTANCE=$(curl -s http://localhost:51678/v1/metadata | jq -r .ContainerInstanceArn)
+ECS_CLUSTER=$(curl -s http://$ECS_AGENT/v1/metadata | jq -r .Cluster)
+CONTAINER_INSTANCE=$(curl -s http://$ECS_AGENT/v1/metadata | jq -r .ContainerInstanceArn)
+
+if [ "$ECS_CLUSTER" == "" ]; then
+  echo "$(date +%s) - Failed to identify the ECS_CLUSTER"
+fi
+
+if [ "$CONTAINER_INSTANCE" == "" ]; then
+  echo "$(date +%s) - Failed to identify the CONTAINER_INSTANCE"
+fi
 
 # Every 5 seconds, check termination time
 while sleep 5; do
